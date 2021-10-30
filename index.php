@@ -3,11 +3,8 @@
 session_start();
 if(isset($_COOKIE['email'])){
   $_SESSION['email'] = $_COOKIE['email'];
-  $_SESSION['pass'] = $_COOKIE['pass'];
   header("Location:home.php");
 }
-
-echo 1;
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -17,6 +14,7 @@ error_reporting(E_ALL);
 include "connection.php";
 
 if (isset($_POST['signupbutton'])) {
+  unset($_POST['signupbutton']);
   
   if ($_POST['email'] == '' or $_POST['password'] == '' or $_POST['name'] == '' or $_POST['re-password' == '']) {
     echo "</br>please fill the required fields";
@@ -36,28 +34,34 @@ if (isset($_POST['signupbutton'])) {
     }
     //end here
 
-
     $test = $conn->query("SELECT * FROM `login` WHERE `email` = '{$email}'");
     if (mysqli_num_rows($test) > 0) {
       echo "email already exist";
     } else {
-      $insertquery = "INSERT INTO `login` (`name`,`email`,`password`,`code`,`data`) VALUES ('{$name}','{$email}','{$pass}','{$code}','')";
+
+      $insertquery = "INSERT INTO `login` (`name`,`email`,`password`,`code`) VALUES ('{$name}','{$email}','{$pass}','{$code}')";
       $conn->query($insertquery);
+
       $createuser = "CREATE TABLE `".$code."`( `groupname` TEXT NOT NULL , `groupcode` TEXT NOT NULL , `money` INT NOT NULL )";
+      $conn->query($createuser);
       echo $conn->error;
+
       if(!empty($_POST['checkbox'])){
         setcookie("email",$email,time()+5*60*60);
         setcookie("pass",$pass,time()+5*60*60); 
+        $_SESSION['email'] = $email;
       }else{
-        setcookie("email",$email,time()+3*60);
-        setcookie("pass",$pass,time()+3*60);
+        setcookie("email",$email,time()+60*60);
+        setcookie("pass",$pass,time()+60*60);
+        $_SESSION['email'] = $email;
       }
       header("location:home.php");
     }
   }
 } // for signing up
-
+//................................................................
 if (isset($_POST['loginbutton'])) {
+  unset($_POST['loginbutton']);
 
   if ($_POST['emailcheck'] == '' or $_POST['passwordcheck'] == '') {
     echo "</br>please fill  fields";
@@ -73,11 +77,13 @@ if (isset($_POST['loginbutton'])) {
       if (!empty($_POST['checkbox'])) {
         setcookie("email", $email, time() + 5 * 60 * 60);
         setcookie("pass", $pass, time() + 5 * 60 * 60);
-        $_SESSION['user'] = $email;
+        $_SESSION['email'] = $email;
       } else {
-        setcookie("email", $email, time() + 3 * 60);
-        setcookie("pass", $pass, time() + 3 * 60);
+        setcookie("email", $email, time() + 60*60);
+        setcookie("pass", $pass, time() + 60*60);
+        $_SESSION['email'] = $email;
       }
+      
       header("location:home.php");
     } else {
       echo "email or password is wrong";

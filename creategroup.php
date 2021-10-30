@@ -1,8 +1,10 @@
 <?php
 
 session_start();
+if(!isset($_COOKIE['email'])){
+  header("Location:index.php");
+}
 
-echo 3;
 
 include "connection.php";
 
@@ -13,21 +15,14 @@ error_reporting(E_ALL);
 //...........................................
 
 /* this is the line to generate random 6 digit alpha numeric code*/
-$str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-$table_name = substr(str_shuffle($str_result), 0, 6);
+
 //end here
 
 //............................................
-
-$cre = "CREATE TABLE `".$table_name."` ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , `code` TEXT NOT NULL , `expenses` INT NOT NULL DEFAULT '0' , PRIMARY KEY (`id`))";
-
-if ($conn->query($cre) === TRUE) {
-  echo "table created";
-} else {
-  echo $conn->error;
-}
+$table_name = $_SESSION['tablecode'];
 
 if (isset($_POST["add"])) {
+  unset($_POST["add"]);
   $name = $_POST["name"];
   $code = $_POST["code"];
   trim($name);
@@ -47,16 +42,25 @@ if (isset($_POST["add"])) {
 }
 
 if (isset($_POST["creategroup"])) {
+  unset($_POST['creategroup']);
   $select = $conn->query("SELECT * FROM `".$table_name."`") or die($conn->error);
   if ($select->num_rows > 1) {
+    header("Location:journey.php");
   } else {
     echo "please add more than one person";
   }
-  header("Location:journey.php");
 }
 if (isset($_POST['logout'])) {
-  unset($_COOKIE['email']);
-  unset($_COOKIE['pass']);
+  unset($_POST['logout']);
+  setcookie("email",$email,time()-5*60*60);
+  setcookie("pass",$pass,time()-5*60*60);
+  unset($_SESSION['email']);
+  $del = "DROP TABLE  `" . $table_name . "`";
+  if ($conn->query($del)) {
+    echo "table destroyed";
+  } else {
+    echo $conn->error;
+  }
   header("Location:index.php");
 }
 
@@ -66,7 +70,7 @@ if (isset($_POST['logout'])) {
 <html lang="en">
 
 <head>
-  <title>group</title>
+  <title>creategroup</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -139,6 +143,7 @@ if (isset($_POST['logout'])) {
 </head>
 
 <body>
+  <h1><?php echo $table_name;?></h1>
   <table>
     <tr>
       <th>Name</th>
@@ -171,7 +176,7 @@ if (isset($_POST['logout'])) {
   </div>
   <div>
     <form action="" method="post">
-      <button name="creategroup">create 123group</button>
+      <button name="creategroup">creategroup</button>
       <button name="logout">logout</button>
     </form>
   </div>
@@ -183,3 +188,6 @@ if (isset($_POST['logout'])) {
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+
+</html>
