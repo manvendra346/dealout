@@ -1,12 +1,35 @@
 <?php
-echo $_POST['add'];
+session_start();
+$table_name = $_SESSION['tablecode'];
 
-if(isset($_POST['add'])){
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$final = 10;
+
+echo $_POST["add"];
+
+include "connection.php";
+
+if (isset($_POST['add'])) {
   echo $_POST['add'];
   echo 123456;
 }
-if(isset($_POST['unset'])){
+if (isset($_POST['unset'])) {
   unset($_POST['add']);
+}
+$sql = "SELECT `name`,`code`,`expenses` FROM `" . $table_name . "`";
+if ($result = $conn->query($sql)) {
+  echo $table_name;
+  echo "fuck you";
+  while ($row = $result->fetch_array()) {
+    echo "fuck you";
+    echo $row['code'];
+
+    $conn->query("INSERT INTO `".$row['code']."` (`groupname`,`groupcode`,`money`) VALUES ('','".$table_name."','".$final."')")or die($conn->error);
+    
+  };
 }
 
 
@@ -27,7 +50,7 @@ if(isset($_POST['unset'])){
 <body>
   <form method="post">
     <button name="add">add</button>
-    <button name = "unset">unset</button>
+    <button name="unset">unset</button>
   </form>
 
   <!-- Optional JavaScript -->

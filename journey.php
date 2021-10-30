@@ -86,7 +86,7 @@ if (isset($_POST["endjourney"])) {
       $final = round($final, 2);
       $sql = "UPDATE `" . $table_name . "` SET `expenses` = '{$final}' WHERE `code` = '{$row["code"]}'";
       $conn->query($sql);
-      $sql = "UPDATE `" . $row['code'] . "` SET `groupname` = '',`groupcode` = `" . $table_name . "`,`money` = `" . $final . "`";
+      $sql = "INSERT INTO `" . $row['code'] . "` (`groupname`,`groupcode`,`money`) VALUES ('','".$table_name."','".$final."')";
       $conn->query($sql);
       $conn->error;
     }
@@ -201,7 +201,6 @@ if (isset($_POST["endjourney"])) {
   <div>
     <form action="" method="post">
       <input type="text" placeholder="name" name="payer">
-      <input type="text" placeholder="for" name="for">
       <input type="number" placeholder="0/-" name="payment">
       <input type="submit" value="add payment" name="add">
     </form>

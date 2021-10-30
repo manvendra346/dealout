@@ -250,4 +250,4 @@ if (isset($_POST['logout'])) {
   </script>
 </body>
 
-</html>
+</html
