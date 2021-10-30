@@ -10,9 +10,16 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+//...........................................
 
+/* this is the line to generate random 6 digit alpha numeric code*/
+$str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+$table_name = substr(str_shuffle($str_result), 0, 6);
+//end here
 
-$cre = "CREATE TABLE `journey` ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , `code` TEXT NOT NULL , `expenses` INT NOT NULL DEFAULT '0' , PRIMARY KEY (`id`))";
+//............................................
+
+$cre = "CREATE TABLE `".$table_name."` ( `id` INT NOT NULL AUTO_INCREMENT , `name` TEXT NOT NULL , `code` TEXT NOT NULL , `expenses` INT NOT NULL DEFAULT '0' , PRIMARY KEY (`id`))";
 
 if ($conn->query($cre) === TRUE) {
   echo "table created";
@@ -25,17 +32,32 @@ if (isset($_POST["add"])) {
   $code = $_POST["code"];
   trim($name);
   trim($code);
+  echo $code;
 
-  $sql = "INSERT INTO `journey`(`name`,`code`) VALUES('{$name}','{$code}')";
-  if ($conn->query($sql)) {
-    echo "success";
+  $select = $conn->query("SELECT `code` FROM `login` WHERE `code` = '{$code}'") or die($conn->error);
+  if ($select->num_rows) {
+    $sql = "INSERT INTO `".$table_name."`(`name`,`code`) VALUES('{$name}','{$code}')";
+    if ($conn->query($sql)) {
+      echo "success";
+    }
+    echo $conn->error;
+  } else {
+    echo "user code not found";
   }
-  echo $conn->error;
 }
 
 if (isset($_POST["creategroup"])) {
-  $_POST = array();
+  $select = $conn->query("SELECT * FROM `".$table_name."`") or die($conn->error);
+  if ($select->num_rows > 1) {
+  } else {
+    echo "please add more than one person";
+  }
   header("Location:journey.php");
+}
+if (isset($_POST['logout'])) {
+  unset($_COOKIE['email']);
+  unset($_COOKIE['pass']);
+  header("Location:index.php");
 }
 
 
@@ -48,13 +70,95 @@ if (isset($_POST["creategroup"])) {
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <style> 
+
+        table { 
+
+            margin: 0 auto; 
+
+            font-size: large; 
+
+            border: 1px solid black; 
+
+        } 
+
+  
+
+        h1 { 
+
+            text-align: center; 
+
+            color: #006600; 
+
+            font-size: xx-large; 
+
+            font-family: 'Gill Sans', 'Gill Sans MT',  
+
+            ' Calibri', 'Trebuchet MS', 'sans-serif'; 
+
+        } 
+
+  
+
+        td { 
+
+            background-color: #E4F5D4; 
+
+            border: 1px solid black; 
+
+        } 
+
+  
+
+        th, 
+
+        td { 
+
+            font-weight: bold; 
+
+            border: 1px solid black; 
+
+            padding: 10px; 
+
+            text-align: center; 
+
+        } 
+
+  
+
+        td { 
+
+            font-weight: lighter; 
+
+        } 
+
+    </style> 
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-  <h1><?php echo $table_name; ?></h1>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+    </tr>
+    <!-- PHP CODE TO FETCH DATA FROM ROWS-->
+    <?php   // LOOP TILL END OF DATA 
+    $result = $conn->query("SELECT `name`,`code` FROM `".$table_name."`") or die($conn->error);
+    while ($rows = $result->fetch_assoc()) {
+    ?>
+      <tr>
+        <!--FETCHING DATA FROM EACH 
+                    ROW OF EVERY COLUMN-->
+        <td><?php echo $rows['name']; ?></td>
+        <td><?php echo $rows['code']; ?></td>
+      </tr>
+    <?php
+    }
+    ?>
+  </table>
 
   <div>
     ADD MEMEBERS!
@@ -67,13 +171,8 @@ if (isset($_POST["creategroup"])) {
   </div>
   <div>
     <form action="" method="post">
-      <button name="creategroup">creategroup</button>
-    </form>
-  </div>
-  <div>
-    <form method="post">
-      <button name="delete">delete table</button>
-      <button name="create">create table</button>
+      <button name="creategroup">create 123group</button>
+      <button name="logout">logout</button>
     </form>
   </div>
 
