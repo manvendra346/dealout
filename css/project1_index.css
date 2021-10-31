@@ -1,0 +1,135 @@
+body{
+	margin:0;
+	padding:0;
+	font-family: 'Raleway',sans-serif;
+	color: #fff;
+}
+.banner{
+	height: 100vh;
+	width: 100%;
+	background-image: linear-gradient(rgba(0, 0, 0, 0.1),rgba(0, 0, 0, 0.1)),url(../images/4389.jpg);
+	filter: brightness(100%);
+	background-position: top;
+	background-size:cover;
+	/*background-attachment: fixed;*/
+	background-repeat: no-repeat;
+}
+.banner .navbar{
+	margin-top:0%;
+}
+.banner .navbar-brand{
+	color: #7072ea;
+	font-size:2em;
+	font-weight: 700;
+	margin-left: 2%;
+	margin-right: 3%;
+}
+.banner .nav{
+	margin-right:0%; 
+}
+.banner .nav li a{
+	color:#957d82;
+	font-size: 1.2em;
+}
+.banner .info{
+	margin-top:15%;
+	transform: translateY(-15%);
+}
+.banner .info h1{
+	font: Times;
+	font-size: 2.5em;
+	font-weight: bolder;
+	color: #282727;
+	letter-spacing: 2px;
+}
+.banner .info p{
+	font-size: 2em;
+	font-weight: 700;
+	color: #b44e62;
+	letter-spacing: 2px;
+}
+.banner .info a{
+	margin-left:50%;
+	/* margin-bottom: 5%; */
+	width: 200px;
+	display: inline-block;
+	transform: translateX(-50%);
+	color: #2f6868;
+	background: #32c1c2;
+	padding:10px 20px; 
+	font-size: 2em;
+	font-weight: 600;
+}
+.banner .info a:hover{
+	background: #8cb2b2;
+}
+.navbar{
+	padding: 0 0;
+}
+.navbar ul form{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-right: 10px;
+}
+
+.navButtons{
+	color: #7072ea;
+	margin: 10px 0;
+	width: 100%;
+	height: 11vh;
+	margin-right: 10px;
+}
+
+.name-code{
+	color: #7072ea;
+	font-weight: bold;
+	margin-right: 10px;
+	font-size: 1.5rem;
+}
+
+.row{
+	height: 13vh;
+}
+
+.name-code-class{
+	display: flex;
+	justify-content: space-around;
+}
+
+.main-content{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+}
+
+#tagline{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	color: #1d1d22;
+	margin-top: 40px;
+	font-weight: bold;
+}
+
+.group-table{
+	overflow: scroll;
+	width: 50%;
+	margin-top: 50px;
+}
+.main-content .table{
+	width: 100%;
+	background-color: #32C1C2;
+	color: #2F6868;
+	font-weight: bold;
+	font-size: 1rem;
+}
+
+#groupname{
+	margin-top: 11px;
+	margin-left: -151px;
+	width: 305%;
+	height: 11vh;
+}
