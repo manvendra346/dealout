@@ -1,6 +1,6 @@
 # dealout
 
-this is a simple project made to make the division of journey or trip expenses division
+this is a simple project made to make the division of journey or trip expenses
 easier .....
 
 it uses mysql database to store the expenses made by each member and at the end of journey 
